@@ -7,7 +7,7 @@ public interface PlugIn {
 
 	/** This method is called when the plugin is loaded.
 		'arg', which may be blank, is the argument specified
-		for this plugin in IJ_Props.txt. */ 
-	public void run(String arg);
+		for this plugin in IJ_Props.txt. */
+	void run(String arg);
 	
 }

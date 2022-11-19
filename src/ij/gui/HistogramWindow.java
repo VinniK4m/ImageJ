@@ -344,6 +344,10 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 		if (maxCount==0) maxCount = 1;
 		frame = new Rectangle(XMARGIN, YMARGIN, HIST_WIDTH, HIST_HEIGHT);
 		ip.drawRect(frame.x-1, frame.y, frame.width+2, frame.height+1);
+		refactor3(maxCount,ip);
+	}
+
+	private void refactor3(long maxCount, ImageProcessor ip) {
 		if (histogram.length==256) {
 			double scale2 = HIST_WIDTH/256.0;
 			int barWidth = 1;
@@ -359,13 +363,13 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 		} else if (histogram.length<=HIST_WIDTH) {
 			int index, y;
 			for (int i=0; i<HIST_WIDTH; i++) {
-				index = (int)(i*(double)histogram.length/HIST_WIDTH); 
+				index = (int)(i*(double)histogram.length/HIST_WIDTH);
 				y = (int)(((double)HIST_HEIGHT*(double)histogram[index])/maxCount);
 				if (y>HIST_HEIGHT) y = HIST_HEIGHT;
 				ip.drawLine(i+XMARGIN, YMARGIN+HIST_HEIGHT, i+XMARGIN, YMARGIN+HIST_HEIGHT-y);
 			}
 		} else {
-			double xscale = (double)HIST_WIDTH/histogram.length; 
+			double xscale = (double)HIST_WIDTH/histogram.length;
 			for (int i=0; i<histogram.length; i++) {
 				long value = histogram[i];
 				if (value>0L) {
@@ -376,46 +380,16 @@ public class HistogramWindow extends ImageWindow implements Measurements, Action
 				}
 			}
 		}
+
 	}
-		
+
 	void drawLogPlot (long maxCount, ImageProcessor ip) {
 		frame = new Rectangle(XMARGIN, YMARGIN, HIST_WIDTH, HIST_HEIGHT);
 		ip.drawRect(frame.x-1, frame.y, frame.width+2, frame.height+1);
 		double max = Math.log(maxCount);
 		ip.setColor(Color.gray);
-		if (histogram.length==256) {
-			double scale2 = HIST_WIDTH/256.0;
-			int barWidth = 1;
-			if (SCALE>1) barWidth=2;
-			if (SCALE>2) barWidth=3;
-			for (int i=0; i < 256; i++) {
-				int x =(int)(i*scale2);
-				int y = histogram[i]==0?0:(int)(HIST_HEIGHT*Math.log(histogram[i])/max);
-				if (y>HIST_HEIGHT) y = HIST_HEIGHT;
-				for (int j = 0; j<barWidth; j++)
-					ip.drawLine(x+j+XMARGIN, YMARGIN+HIST_HEIGHT, x+j+XMARGIN, YMARGIN+HIST_HEIGHT-y);
-			}
-		} else if (histogram.length<=HIST_WIDTH) {
-			int index, y;
-			for (int i = 0; i<HIST_WIDTH; i++) {
-				index = (int)(i*(double)histogram.length/HIST_WIDTH); 
-				y = histogram[index]==0?0:(int)(HIST_HEIGHT*Math.log(histogram[index])/max);
-				if (y>HIST_HEIGHT) y = HIST_HEIGHT;
-				ip.drawLine(i+XMARGIN, YMARGIN+HIST_HEIGHT, i+XMARGIN, YMARGIN+HIST_HEIGHT-y);
-			}
-		} else {
-			double xscale = (double)HIST_WIDTH/histogram.length; 
-			for (int i=0; i<histogram.length; i++) {
-				long value = histogram[i];
-				if (value>0L) {
-					int y = (int)(HIST_HEIGHT*Math.log(value)/max);
-					if (y>HIST_HEIGHT) y = HIST_HEIGHT;
-					int x = (int)(i*xscale)+XMARGIN;
-					ip.drawLine(x, YMARGIN+HIST_HEIGHT, x, YMARGIN+HIST_HEIGHT-y);
-				}
-			}
-		}
 		ip.setColor(Color.black);
+		refactor3(maxCount, ip);
 	}
 		
 	void drawText(ImageProcessor ip, int x, int y, boolean fixedRange) {
