@@ -75,7 +75,7 @@ public class FileInfoVirtualStack extends VirtualStack implements PlugIn {
 			IJ.error("Virtual Stack", "ZIP compressed stacks not supported");
 			return;
 		}
-		TiffDecoder td = new TiffDecoder(dir, name);
+		TiffManager td = new TiffManager(dir, name);
 		if (IJ.debugMode) td.enableDebugging();
 		IJ.showStatus("Decoding TIFF header...");
 		try {

@@ -224,7 +224,7 @@ public class FileOpener {
 		Overlay overlay = new Overlay();
 		Overlay proto = null;
 		for (int i=0; i<rois.length; i++) {
-			Roi roi = RoiDecoder.openFromByteArray(rois[i]);
+			Roi roi = ij.io.RoiManager.openFromByteArray(rois[i]);
 			if (roi==null)
 				continue;
 			if (proto==null) {
@@ -304,7 +304,7 @@ public class FileOpener {
 	}
 	
 	private void decodeAndSetRoi(ImagePlus imp, FileInfo fi) {
-		Roi roi = RoiDecoder.openFromByteArray(fi.roi);
+		Roi roi = ij.io.RoiManager.openFromByteArray(fi.roi);
 		imp.setRoi(roi);
 		if ((roi instanceof PointRoi) && ((PointRoi)roi).getNCounters()>1) 
 			IJ.setTool("multi-point");

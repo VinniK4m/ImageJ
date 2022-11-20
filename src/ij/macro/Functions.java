@@ -1,5 +1,6 @@
 package ij.macro;
 import ij.*;
+import ij.plugin.frame.RoiManager;
 import ij.process.*;
 import ij.gui.*;
 import ij.measure.*;

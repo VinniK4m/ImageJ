@@ -1,5 +1,6 @@
 package ij;
 import ij.gui.*;
+import ij.plugin.frame.RoiManager;
 import ij.process.*;
 import ij.io.*;
 import ij.plugin.*;

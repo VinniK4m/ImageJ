@@ -10,7 +10,7 @@ import ij.gui.*;
 
 /** Saves the current ROI outline to a file. RoiDecoder.java 
 	has a description of the file format.
-	@see ij.io.RoiDecoder
+	@see ij.io.RoiManager
 	@see ij.plugin.RoiReader
 */
 public class RoiWriter implements PlugInFilter {
@@ -44,7 +44,7 @@ public class RoiWriter implements PlugInFilter {
 		if (name == null)
 			return;
 		String dir = sd.getDirectory();
-		RoiEncoder re = new RoiEncoder(dir+name);
+		ij.io.RoiManager re = new ij.io.RoiManager(dir+name);
 		re.write(roi);
 		if (name.endsWith(".roi"))
 			name = name.substring(0, name.length()-4);

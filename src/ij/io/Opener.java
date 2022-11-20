@@ -902,7 +902,7 @@ public class Opener {
 	/** Attempts to open the specified file as a tiff.
 		Returns an ImagePlus object if successful. */
 	public ImagePlus openTiff(String directory, String name) {
-		TiffDecoder td = new TiffDecoder(directory, name);
+		TiffManager td = new TiffManager(directory, name);
 		if (IJ.debugMode) td.enableDebugging();
 		FileInfo[] info=null;
 		try {
@@ -919,7 +919,7 @@ public class Opener {
 	
 	/** Opens the nth image of the specified TIFF stack. */
 	public ImagePlus openTiff(String path, int n) {
-		TiffDecoder td = new TiffDecoder(getDir(path), getName(path));
+		TiffManager td = new TiffManager(getDir(path), getName(path));
 		if (IJ.debugMode) td.enableDebugging();
 		FileInfo[] info=null;
 		try {
@@ -954,7 +954,7 @@ public class Opener {
 	/** Returns the FileInfo of the specified TIFF file. */
 	public static FileInfo[] getTiffFileInfo(String path) {
 		Opener o = new Opener();
-		TiffDecoder td = new TiffDecoder(o.getDir(path), o.getName(path));
+		TiffManager td = new TiffManager(o.getDir(path), o.getName(path));
 		if (IJ.debugMode) td.enableDebugging();
 		try {
 			return td.getTiffInfo();
@@ -968,7 +968,7 @@ public class Opener {
 	public ImagePlus openTiff(InputStream in, String name) {
 		FileInfo[] info = null;
 		try {
-			TiffDecoder td = new TiffDecoder(in, name);
+			TiffManager td = new TiffManager(in, name);
 			if (IJ.debugMode) td.enableDebugging();
 			info = td.getTiffInfo();
 		} catch (FileNotFoundException e) {
@@ -1007,7 +1007,7 @@ public class Opener {
 			if (name.endsWith(".roi")) {
 				zis.close();
 				if (!silentMode)
-					if (IJ.isMacro() && Interpreter.isBatchMode() && RoiManager.getInstance()==null)
+					if (IJ.isMacro() && Interpreter.isBatchMode() && ij.plugin.frame.RoiManager.getInstance()==null)
 						IJ.log("Use roiManager(\"Open\", path) instead of open(path)\nto open ROI sets in batch mode macros.");
 					else
 						IJ.runMacro("roiManager(\"Open\", getArgument());", path);
@@ -1048,7 +1048,7 @@ public class Opener {
 	/** Deserialize a byte array that was serialized using the FileSaver.serialize(). */
 	public ImagePlus deserialize(byte[] bytes) {
 		ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-		TiffDecoder decoder = new TiffDecoder(stream, "Untitled");
+		TiffManager decoder = new TiffManager(stream, "Untitled");
 		if (IJ.debugMode)
 			decoder.enableDebugging();
 		FileInfo[] info = null;
@@ -1150,7 +1150,7 @@ public class Opener {
 	/** Attempts to open the specified ROI, returning null if unsuccessful. */
 	public Roi openRoi(String path) {
 		Roi roi = null;
-		RoiDecoder rd = new RoiDecoder(path);
+		ij.io.RoiManager rd = new ij.io.RoiManager(path);
 		try {roi = rd.getRoi();}
 		catch (IOException e) {
 			IJ.error("RoiDecoder", e.getMessage());

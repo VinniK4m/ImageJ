@@ -1,7 +1,6 @@
 package ij.gui;
 import ij.*;
 import ij.plugin.Colors;
-import ij.io.RoiDecoder;
 import ij.process.*;
 import ij.measure.*;
 import ij.util.Tools;

@@ -8,8 +8,7 @@
 package ij.plugin.tool;
 import ij.*;
 import ij.gui.*;
-import ij.plugin.RoiRotator;
-import ij.plugin.tool.PlugInTool;
+import ij.plugin.RoiManagerRotator;
 import ij.plugin.frame.Recorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -117,7 +116,7 @@ public class RoiRotationTool extends PlugInTool {
 		startX = xNew;	
 		startY = yNew;
 		
-		newRoi = RoiRotator.rotate(roi, phi*180/Math.PI);
+		newRoi = RoiManagerRotator.rotate(roi, phi*180/Math.PI);
 		if (isImageRoi)
 			imp2.draw();
 		else

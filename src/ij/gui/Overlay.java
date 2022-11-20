@@ -370,7 +370,7 @@ public class Overlay implements Iterable<Roi> {
 			Roi roi = get(i);
 			int position = roi.getPosition();
 			if (!Rotator.GRID.equals(roi.getName()))
-				roi = RoiRotator.rotate(roi, angle, xcenter, ycenter);
+				roi = RoiManagerRotator.rotate(roi, angle, xcenter, ycenter);
 			roi.setPosition(position);
 			overlay2.add(roi);
 		}

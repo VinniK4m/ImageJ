@@ -111,12 +111,12 @@ public class FileSaver {
 			Plot plot = (Plot)(imp.getProperty(Plot.PROPERTY_KEY));
 			fi.plot = plot.toByteArray();
 		}
-		fi.roi = RoiEncoder.saveAsByteArray(imp.getRoi());
+		fi.roi = ij.io.RoiManager.saveAsByteArray(imp.getRoi());
 		fi.overlay = getOverlay(imp);
 		fi.properties = imp.getPropertiesAsArray();
 		DataOutputStream out = null;
 		try {
-			TiffEncoder file = new TiffEncoder(fi);
+			TiffManager file = new TiffManager(fi);
 			out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path),bsize));
 			file.write(out);
 			out.close();
@@ -166,7 +166,7 @@ public class FileSaver {
 			Roi roi = overlay.get(i);
 			if (i==0)
 				roi.setPrototypeOverlay(overlay);
-			array[i] = RoiEncoder.saveAsByteArray(roi);
+			array[i] = ij.io.RoiManager.saveAsByteArray(roi);
 		}
 		return array;
 	}
@@ -202,13 +202,13 @@ public class FileSaver {
 			fi.sliceLabels = labels;
 		} else
 			fi.sliceLabels = imp.getStack().getSliceLabels();
-		fi.roi = RoiEncoder.saveAsByteArray(imp.getRoi());
+		fi.roi = ij.io.RoiManager.saveAsByteArray(imp.getRoi());
 		fi.overlay = getOverlay(imp);
 		fi.properties = imp.getPropertiesAsArray();
 		if (imp.isComposite()) saveDisplayRangesAndLuts(imp, fi);
 		DataOutputStream out = null;
 		try {
-			TiffEncoder file = new TiffEncoder(fi);
+			TiffManager file = new TiffManager(fi);
 			out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path),bsize));
 			file.write(out);
 			out.close();
@@ -237,12 +237,12 @@ public class FileSaver {
 			Plot plot = (Plot)(imp.getProperty(Plot.PROPERTY_KEY));
 			fi.plot = plot.toByteArray();
 		}
-		fi.roi = RoiEncoder.saveAsByteArray(imp.getRoi());
+		fi.roi = ij.io.RoiManager.saveAsByteArray(imp.getRoi());
 		fi.overlay = getOverlay(imp);
 		if (imp.isComposite()) saveDisplayRangesAndLuts(imp, fi);
 		ByteArrayOutputStream out = null;
 		try {
-			TiffEncoder encoder = new TiffEncoder(fi);
+			TiffManager encoder = new TiffManager(fi);
 			out = new ByteArrayOutputStream();
 			encoder.write(out);
 			out.close();
@@ -305,7 +305,7 @@ public class FileSaver {
 			Plot plot = (Plot)(imp.getProperty(Plot.PROPERTY_KEY));
 			fi.plot = plot.toByteArray();
 		}
-		fi.roi = RoiEncoder.saveAsByteArray(imp.getRoi());
+		fi.roi = ij.io.RoiManager.saveAsByteArray(imp.getRoi());
 		fi.overlay = getOverlay(imp);
 		fi.sliceLabels = imp.getStack().getSliceLabels();
 		if (imp.isComposite()) saveDisplayRangesAndLuts(imp, fi);
@@ -316,7 +316,7 @@ public class FileSaver {
 			ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(path));
 			out = new DataOutputStream(new BufferedOutputStream(zos,bsize));
         	zos.putNextEntry(new ZipEntry(name));
-			TiffEncoder te = new TiffEncoder(fi);
+			TiffManager te = new TiffManager(fi);
 			te.write(out);
 			out.close();
 		}

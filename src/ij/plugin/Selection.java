@@ -93,7 +93,7 @@ public class Selection implements PlugIn, Measurements {
 				return;
 			}
 		}
-		(new RoiRotator()).run("");
+		(new RoiManagerRotator()).run("");
 	}
 	
 	private void enlarge(ImagePlus imp) {

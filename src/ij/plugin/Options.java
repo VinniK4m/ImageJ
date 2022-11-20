@@ -225,7 +225,7 @@ public class Options implements PlugIn {
 				return;
 		}
 		if (!keepRois) {
-			RoiManager rm = RoiManager.getInstance();
+			ij.plugin.frame.RoiManager rm = ij.plugin.frame.RoiManager.getInstance();
 			if (rm!=null)
 				rm.reset();
 		}

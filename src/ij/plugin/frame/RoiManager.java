@@ -112,6 +112,13 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		errorMessage = null;
 	}
 
+
+
+
+	public void RoiManager(DataOutputStream out) {
+
+	}
+
 	void showWindow() {
 		ImageJ ij = IJ.getInstance();
 		addKeyListener(ij);
@@ -873,7 +880,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 						out.write(buf, 0, len);
 					out.close();
 					byte[] bytes = out.toByteArray();
-					RoiDecoder rd = new RoiDecoder(bytes, name);
+					ij.io.RoiManager rd = new ij.io.RoiManager(bytes, name);
 					Roi roi = rd.getRoi();
 					if (roi!=null) {
 						name = name.substring(0, name.length()-4);
@@ -938,7 +945,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 			listModel.setElementAt(newName, indexes[0]);
 			path = dir+name2;
 		}
-		RoiEncoder re = new RoiEncoder(path);
+		ij.io.RoiManager re = new ij.io.RoiManager(path);
 		errorMessage = null;
 		try {
 			re.write(roi);
@@ -977,7 +984,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		try {
 			ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(path)));
 			out = new DataOutputStream(new BufferedOutputStream(zos));
-			RoiEncoder re = new RoiEncoder(out);
+			ij.io.RoiManager re = new ij.io.RoiManager(out);
 			for (int i=0; i<indexes.length; i++) {
 				IJ.showProgress(i, indexes.length);
 				String label = getUniqueName(names, indexes[i]);
@@ -2477,7 +2484,7 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 				xcenter = center.xpoints[0];
 				ycenter = center.ypoints[0];
 			}
-			Roi roi2 = RoiRotator.rotate(roi, angle, xcenter, ycenter);
+			Roi roi2 = RoiManagerRotator.rotate(roi, angle, xcenter, ycenter);
 			rois.set(i, roi2);
 		}
 		ImagePlus imp = WindowManager.getCurrentImage();

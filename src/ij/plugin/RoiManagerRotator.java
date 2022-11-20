@@ -1,12 +1,18 @@
 package ij.plugin;
+
 import ij.*;
-import ij.process.*;
 import ij.gui.*;
+import ij.io.OpenDialog;
+import ij.process.ByteProcessor;
+import ij.process.FloatPolygon;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.io.IOException;
 
 /** This plugin implements the Edit/Selection/Rotate command. */
-public class RoiRotator implements PlugIn {
+public class RoiManagerRotator implements PlugIn {
 	private static double defaultAngle = 15;
 	private static boolean rotateAroundImageCenter;
 
@@ -124,5 +130,40 @@ public class RoiRotator implements PlugIn {
 		roi2.copyAttributes(roi);
 		return roi2;
 	}
-	
+
+
+	final int polygon=0, rect=1, oval=2, line=3,freeLine=4, segLine=5, noRoi=6,freehand=7, traced=8;
+
+	public void run2(String arg) {
+		OpenDialog od = new OpenDialog("Open ROI...", arg);
+		String dir = od.getDirectory();
+		String name = od.getFileName();
+		if (name==null)
+			return;
+		try {
+			openRoi(dir, name);
+		} catch (IOException e) {
+			String msg = e.getMessage();
+			if (msg==null || msg.equals(""))
+				msg = ""+e;
+			IJ.error("ROI Reader", msg);
+		}
+	}
+
+	public void openRoi(String dir, String name) throws IOException {
+		String path = dir+name;
+		ij.io.RoiManager rd = new ij.io.RoiManager(path);
+		Roi roi = rd.getRoi();
+		Rectangle r = roi.getBounds();
+		ImagePlus img = WindowManager.getCurrentImage();
+		if (img==null || img.getWidth()<(r.x+r.width) || img.getHeight()<(r.y+r.height)) {
+			ImageProcessor ip =  new ByteProcessor(r.x+r.width+10, r.y+r.height+10);
+			img = new ImagePlus(name, ip);
+			img.show();
+		}
+		img.setRoi(roi);
+	}
+
+
+
 }
