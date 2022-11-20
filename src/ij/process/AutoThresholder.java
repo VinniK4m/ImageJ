@@ -453,19 +453,20 @@ public class AutoThresholder {
 		// 06.15.2007
 		// Ported to ImageJ plugin by G.Landini from E Celebi's fourier_0.8 routines
 		int threshold=-1;
-		int ih, it;
-		int first_bin;
-		int last_bin;
+		int ih = 0, it = 0;
+		int first_bin = 0;
+		int last_bin = 0;
 		double tot_ent;  /* total entropy */
 		double max_ent;  /* max entropy */
+		//refactor4(ih, data, first_bin, last_bin);
 		double ent_back; /* entropy of the background pixels at a given threshold */
 		double ent_obj;  /* entropy of the object pixels at a given threshold */
 		double [] norm_histo = new double[256]; /* normalized histogram */
 		double [] P1 = new double[256]; /* cumulative normalized histogram */
-		double [] P2 = new double[256]; 
+		double [] P2 = new double[256];
 
 		double total =0;
-		for (ih = 0; ih < 256; ih++ ) 
+		for (ih = 0; ih < 256; ih++ )
 			total+=data[ih];
 
 		for (ih = 0; ih < 256; ih++ )
@@ -1084,7 +1085,46 @@ public class AutoThresholder {
 		return threshold;
 	}
 
+	private void refactor4(int ih, int data[], int first_bin, int last_bin){
+		double ent_back; /* entropy of the background pixels at a given threshold */
+		double ent_obj;  /* entropy of the object pixels at a given threshold */
+		double [] norm_histo = new double[256]; /* normalized histogram */
+		double [] P1 = new double[256]; /* cumulative normalized histogram */
+		double [] P2 = new double[256];
 
+		double total =0;
+		for (ih = 0; ih < 256; ih++ )
+			total+=data[ih];
+
+		for (ih = 0; ih < 256; ih++ )
+			norm_histo[ih] = data[ih]/total;
+
+		P1[0]=norm_histo[0];
+		P2[0]=1.0-P1[0];
+		for (ih = 1; ih < 256; ih++ ){
+			P1[ih]= P1[ih-1] + norm_histo[ih];
+			P2[ih]= 1.0 - P1[ih];
+		}
+
+		/* Determine the first non-zero bin */
+		first_bin=0;
+		for (ih = 0; ih < 256; ih++ ) {
+			if ( !(Math.abs(P1[ih])<2.220446049250313E-16)) {
+				first_bin = ih;
+				break;
+			}
+		}
+
+		/* Determine the last non-zero bin */
+		last_bin=255;
+		for (ih = 255; ih >= first_bin; ih-- ) {
+			if ( !(Math.abs(P2[ih])<2.220446049250313E-16)) {
+				last_bin = ih;
+				break;
+			}
+		}
+
+	}
 	int Triangle(int [] data ) {
 		//  Zack, G. W., Rogers, W. E. and Latt, S. A., 1977,
 		//  Automatic Measurement of Sister Chromatid Exchange Frequency,
